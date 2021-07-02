@@ -62,7 +62,7 @@ public class ToDoRestController {
     /* --- U: ToDoを完了する --- 
     @PutMapping("/{mid}/todos/{seq}/done")
     ToDo done(@PathVariable String mid, @PathVariable Long seq) {
-        return todoService.done(mid, seq);
+        return todoService.done(seq);
     }
 
     /* --- U: ToDoを更新する --- 
