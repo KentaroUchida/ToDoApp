@@ -65,7 +65,7 @@ public class ToDoController {
         List<ToDo> dones = ts.getDoneList(mid);
 
         // Doneはdone日時が新しいもの順にソート
-        dones.sort((a, b) -> a.getDoneAt().before(b.getDoneAt()) ? 1 : -1);
+        //dones.sort((a, b) -> a.getDoneAt().before(b.getDoneAt()) ? 1 : -1);
 
         Member member = ms.getMember(mid);
         ToDoForm blankForm = new ToDoForm();
@@ -88,26 +88,11 @@ public class ToDoController {
      */
     @GetMapping("/all")
     public String showToDoListOfAll(Model model) {
-        //System.out.println("mid=" +mid +"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
-        // すべてのユーザのToDoリスト
         List<ToDo> todos = ts.getToDoList();
-        // すべてのユーザのDoneリスト
         List<ToDo> dones = ts.getDoneList();
-
-        // Doneはdone日時が新しいもの順にソート
-        //dones.sort((a, b) -> a.getDoneAt().before(b.getDoneAt()) ? 1 : -1);
-
-        //Member member = ms.getMember(mid);
-        //ToDoForm blankForm = new ToDoForm();
-
         // テンプレートにオブジェクトをセットする
         model.addAttribute("todos", todos);
         model.addAttribute("dones", dones);
-        //model.addAttribute("member", member);
-        //model.addAttribute("ToDoForm", blankForm);
-       // System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
         return "ourtodos";
     }
 
@@ -136,10 +121,8 @@ public class ToDoController {
      */
     @PostMapping("/{mid}/{seq}/done")
     public String doneToDo(@PathVariable String mid,@PathVariable Long seq,Model model) {
-        ToDo t = ts.getToDo(seq);
-        t.setDone(true);
-        tRepo.save(t);
-        return showToDoListOfMember(mid, model);
+        ts.done(seq);
+        return "redirect:/" + mid;
     }
 
 }

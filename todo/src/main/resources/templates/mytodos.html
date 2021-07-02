@@ -8,7 +8,6 @@
 
 <body>
     <h1 th:text="|ようこそ ${member.name} さん|"></h1>
-    <a class="button" th:href="@{/{mid}(mid=${member.mid})}">自分のToDo</a>
     <a class="button" th:href="@{/all}">みんなのToDo</a>
     <input type="button" value="ログアウト" onclick="location.href='http://localhost:18080/'">
     <h2>ToDo</h2>
@@ -26,9 +25,10 @@
             <td>[[${todo.mid}]]</td>
             <td>[[${#dates.format(todo.createdAt, 'yyyy-MM-dd')}]]</td>
             <td>
-                <th:block th:if="${todo.mid} == ${member.mid}">
-                    <a class="button" th:href="@{/{mid}/{seq}/done(mid=${member.mid}, seq=${todo.seq})}" method="post">Done !</a>
-                </th:block>
+                <form role="form" th:action="@{/{mid}/{seq}/done(mid=${member.mid}, seq=${todo.seq})}"
+                    th:object="${ToDoForm}" method="post">
+                    <input type="submit" value="Done" class="button" />
+                </form>
             </td>
         </tr>
         <tr class="newtodo">
@@ -37,7 +37,7 @@
                 <td colspan="3" style="text-align:left;">
                     <div>
                         <label for="title">タイトル：</label>
-                        <input type="text" required th:field="*{title}"/>
+                        <input type="text" required th:field="*{title}" />
                     </div>
                 </td>
                 <td>
@@ -58,11 +58,10 @@
         <tr th:each="done: ${dones} ">
             <td>#[[${done.seq}]]</td>
             <td>[[${done.title}]]</a></td>
-            <td>[[${done.name}]]</td>
+            <td>[[${done.mid}]]</td>
             <td>[[${#dates.format(done.doneAt, 'yyyy-MM-dd')}]]</td>
         </tr>
     </table>
-    <hr />
 
 </body>
 

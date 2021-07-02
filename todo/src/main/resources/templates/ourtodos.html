@@ -3,11 +3,42 @@
 
 <head>
     <meta charset="UTF-8">
-    <title th:text="${member.name} + 'さんのToDoList'"></title>
+    <title>全員のToDoList</title>
 </head>
 
 <body>
-    
+    <input type="button" value="戻る" onclick="history.back()" />
+    <h2>ToDo</h2>
+    <table class="todolist todo">
+        <tr>
+            <th>ID</th>
+            <th>タイトル</th>
+            <th>ユーザ</th>
+            <th>作成日</th>
+        </tr>
+        <tr th:each="todo: ${todos}">
+            <td>#[[${todo.seq}]]</td>
+            <td>[[${todo.title}]]</td>
+            <td>[[${todo.mid}]]</td>
+            <td>[[${#dates.format(todo.createdAt, 'yyyy-MM-dd')}]]</td>
+        </tr>
+    </table>
+    <h2>Done</h2>
+    <table class="todolist done">
+        <tr>
+            <th>ID</th>
+            <th>タイトル</th>
+            <th>ユーザ</th>
+            <th>完了日</th>
+        </tr>
+        <tr th:each="done: ${dones} ">
+            <td>#[[${done.seq}]]</td>
+            <td>[[${done.title}]]</td>
+            <td>[[${done.mid}]]</td>
+            <td>[[${#dates.format(done.doneAt, 'yyyy-MM-dd')}]]</td>
+        </tr>
+    </table>
+    <hr />
 
 </body>
 
