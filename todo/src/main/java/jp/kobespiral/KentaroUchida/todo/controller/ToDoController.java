@@ -26,7 +26,6 @@ import jp.kobespiral.KentaroUchida.todo.service.ToDoService;
  * ToDoのコントローラ
  */
 @Controller
-@RequestMapping("/todos")
 public class ToDoController {
     @Autowired
     ToDoService ts;
@@ -34,6 +33,10 @@ public class ToDoController {
     MemberService ms;
     ToDoRepository tRepo;
 
+    @GetMapping("/")
+    public String showLogin(Model model) {
+        return "login";
+    }
 
     /**
      * ログイン画面
@@ -41,10 +44,10 @@ public class ToDoController {
      * @param model
      * @return ログイン画面ページを表示
      */
-    @GetMapping("/login")
-    public String Login(Model model) {
-        //Member m = ms.getMember(mid);
-        return "login";
+    @PostMapping("/login")
+    public String Login(String mid,Model model) {
+        Member m = ms.getMember(mid);
+        return "redirect:/" + mid;
     }
 
     /**
@@ -83,26 +86,29 @@ public class ToDoController {
      * @param model
      * @return 全ユーザのToDoリストのページを表示
      */
-    @GetMapping("/{mid}/all")
-    public String showToDoListOfAll(@PathVariable String mid, Model model) {
+    @GetMapping("/all")
+    public String showToDoListOfAll(Model model) {
+        //System.out.println("mid=" +mid +"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
         // すべてのユーザのToDoリスト
         List<ToDo> todos = ts.getToDoList();
         // すべてのユーザのDoneリスト
         List<ToDo> dones = ts.getDoneList();
 
         // Doneはdone日時が新しいもの順にソート
-        dones.sort((a, b) -> a.getDoneAt().before(b.getDoneAt()) ? 1 : -1);
+        //dones.sort((a, b) -> a.getDoneAt().before(b.getDoneAt()) ? 1 : -1);
 
-        Member member = ms.getMember(mid);
-        ToDoForm blankForm = new ToDoForm();
+        //Member member = ms.getMember(mid);
+        //ToDoForm blankForm = new ToDoForm();
 
         // テンプレートにオブジェクトをセットする
         model.addAttribute("todos", todos);
         model.addAttribute("dones", dones);
-        model.addAttribute("member", member);
-        model.addAttribute("ToDoForm", blankForm);
+        //model.addAttribute("member", member);
+        //model.addAttribute("ToDoForm", blankForm);
+       // System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
-        return "mytodos";
+        return "ourtodos";
     }
 
     /**
@@ -117,7 +123,7 @@ public class ToDoController {
     public String createToDo(@PathVariable String mid,@ModelAttribute(name = "ToDoForm") ToDoForm form,  Model model) {
         ToDo t = ts.createToDo(mid,form);
         model.addAttribute("ToDoForm", t);
-        return "mytodos";
+        return showToDoListOfMember(mid, model);
     }
 
     /**
@@ -129,11 +135,11 @@ public class ToDoController {
      * @return ToDoリストのページを表示
      */
     @PostMapping("/{mid}/{seq}/done")
-    public String doneToDo(@PathVariable String mid,@PathVariable Long seq) {
+    public String doneToDo(@PathVariable String mid,@PathVariable Long seq,Model model) {
         ToDo t = ts.getToDo(seq);
         t.setDone(true);
         tRepo.save(t);
-        return "mytodos";
+        return showToDoListOfMember(mid, model);
     }
 
 }

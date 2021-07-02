@@ -8,9 +8,9 @@
 
 <body>
     <h1 th:text="|ようこそ ${member.name} さん|"></h1>
-    <a class="button" th:href="@{/todos/{mid}(mid=${member.mid})}">自分のToDo</a>
-    <a class="button" th:href="@{/todos/{mid}/all(mid=${member.mid})}">みんなのToDo</a>
-    <input type="button" value="ログアウト" onclick="location.href='http://localhost:18080/todos/home'">
+    <a class="button" th:href="@{/{mid}(mid=${member.mid})}">自分のToDo</a>
+    <a class="button" th:href="@{/all}">みんなのToDo</a>
+    <input type="button" value="ログアウト" onclick="location.href='http://localhost:18080/'">
     <h2>ToDo</h2>
     <table class="todolist todo">
         <tr>
@@ -27,12 +27,12 @@
             <td>[[${#dates.format(todo.createdAt, 'yyyy-MM-dd')}]]</td>
             <td>
                 <th:block th:if="${todo.mid} == ${member.mid}">
-                    <a class="button" th:href="@{/todos/{mid}/{seq}/done(mid=${member.mid}, seq=${todo.seq})}">Done !</a>
+                    <a class="button" th:href="@{/{mid}/{seq}/done(mid=${member.mid}, seq=${todo.seq})}" method="post">Done !</a>
                 </th:block>
             </td>
         </tr>
         <tr class="newtodo">
-            <form role="form" th:action="@{/todos/{mid}/register(mid=${member.mid})}" th:object="${ToDoForm}" method="post">
+            <form role="form" th:action="@{/{mid}/register(mid=${member.mid})}" th:object="${ToDoForm}" method="post">
                 <td>新規</td>
                 <td colspan="3" style="text-align:left;">
                     <div>
@@ -57,7 +57,7 @@
         </tr>
         <tr th:each="done: ${dones} ">
             <td>#[[${done.seq}]]</td>
-            <td><a th:href="@{/todos/{mid}/{seq}(mid=${member.mid}, seq=${done.seq})}" th:title="${done.description}">[[${done.title}]]</a></td>
+            <td>[[${done.title}]]</a></td>
             <td>[[${done.name}]]</td>
             <td>[[${#dates.format(done.doneAt, 'yyyy-MM-dd')}]]</td>
         </tr>
