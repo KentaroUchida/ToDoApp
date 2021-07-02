@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>ToDo管理アプリケーション</title>
+    <meta charset="utf-8" />
+    <script>
+        function move_to_todos() {
+            const mid = document.querySelector("#mid").value;
+            if (mid) {
+                window.location.assign(mid);
+            } 
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ToDo管理アプリケーション</h1>
+    <hr />
+    <h2>ログイン</h2>
+    <p>
+        <label for="mid">ユーザID: </label>
+        <input type="text" id="mid" name="mid" required />
+        <input type="button" id="mid" name="mid" value="ログイン" onclick="move_to_todos()" />
+        <span id="error" style="color: red;"></span>
+    </p>
+    <hr />
+</body>
+
+</html>
